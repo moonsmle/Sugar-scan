@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sugar Scan - 학교 급식 당류 분석</title>
+    <title>Sugar Scan - 양산남부고 급식 당류 분석</title>
+    
+    <!-- PWA 연결 고리 및 아이폰 지원 설정 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a90e2">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/fluent/192/000000/sugar-cube.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Sugar Scan">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
     <style>
         :root {
             --bg-color: #f4f6f9;
@@ -90,7 +99,7 @@
 <div class="container">
     <header>
         <h1>Sugar Scan</h1>
-        <p>데이터로 보는 우리 학교 식단 인사이트</p>
+        <p>데이터로 보는 양산남부고등학교 식단 인사이트</p>
     </header>
 
     <div class="section">
@@ -143,29 +152,29 @@
 <script>
     const mealData = {
         1: [
-            { id: "06-01", day: "6월 1일(월)", menu: ["쌀밥", "아욱토장국", "오리매운불고기", "깻잎쌈 & 쌈장(자율)", "전통감자전", "배추김치", "소금버터쿠키"], sugar: 26, status: "warn", label: "🟠 경고", desc: "매콤달콤한 오리불고기 양념장과 후식용 소금버터쿠키의 가공당 함량 누적으로 인해 주의가 필요한 수준입니다.", walk: 39, run: 13, bike: 20, rope: 11, tip: "소금버터쿠키 같이 베이커리 디저트가 나오는 날에는 매점 음료수를 꼭 피해 건강을 지키세요!" },
-            { id: "06-02", day: "6월 2일(화)", menu: ["강황쌀밥", "오징어두부국", "가지나물(자율)", "오이배매실무침", "치즈불닭볶음", "깍두기", "젤리뽀"], sugar: 29, status: "warn", label: "🟠 경고", desc: "치즈불닭볶음 소스의 정제 설탕과 후식 젤리뽀의 시럽 당류가 결합하여 수치가 다소 높은 편입니다.", walk: 44, run: 15, bike: 23, rope: 12, tip: "매콤한 양념 볶음 요리는 소스를 밥에 비벼 먹기보다는 건더기 위주로 드시면 당을 아낄 수 있습니다." },
-            { id: "06-04", day: "6월 4일(목)", menu: ["쇠고기굴소스야채볶음밥 & 계란F", "열무된장국", "양배추샐러드 / 아일랜드 드레싱", "타레카츠 & 소스", "깍두기", "학령간편식(샌드위치 외)"], sugar: 34, status: "high", label: "🔴 높음", desc: "볶음밥의 굴소스 양념, 마요네즈 베이스 아일랜드 드레싱, 간식용 샌드위치 가공당이 합쳐져 높음 단계입니다.", walk: 51, run: 17, bike: 27, rope: 14, tip: "아일랜드 드레싱 같은 소스는 완전히 다 부어 먹는 것보다 절반만 덜어내 찍어 드시는 것이 유리합니다." },
-            { id: "06-05", day: "6월 5일(금)", menu: ["쌀밥", "참치김치찌개", "콩나물겨자냉채무침", "돼지갈비옛장구이", "깻잎김치(자율)", "배추김치", "마시는딸기요거트(무가당)"], sugar: 33, status: "high", label: "🔴 높음", desc: "달콤한 조청이 첨가된 돼지갈비 구이 양념과 딸기요거트 가공 유제품의 복합 작용으로 수치가 높습니다.", walk: 50, run: 17, bike: 26, rope: 14, tip: "갈비처럼 당도가 있는 메인 반찬이 등장했을 때는 식사 도중이나 후에 물을 평소보다 많이 마셔주세요." }
+            { id: "06-01", day: "6월 1일(월)", menu: ["쌀밥", "아욱토장국", "오리매운불고기", "깻잎쌈 & 쌈장(자율)", "전통감자전", "배추김치", "소금버터쿠키"], sugar: 26, status: "warn", label: "🟠 경고", desc: "매콤달콤한 오리불고기 양념장과 후식용 소금버터쿠키의 당 함량으로 인해 주의가 필요한 수준입니다.", walk: 39, run: 13, bike: 20, rope: 11, tip: "버터쿠키 같은 베이커리 디저트가 나오는 날에는 매점 음료수를 피해 당류 중첩을 막아보세요!" },
+            { id: "06-02", day: "6월 2일(화)", menu: ["강황쌀밥", "오징어두부국", "가지나물(자율)", "오이배매실무침", "치즈불닭볶음", "깍두기", "젤리뽀"], sugar: 29, status: "warn", label: "🟠 경고", desc: "치즈불닭볶음 소스의 당도와 후식 젤리뽀의 당 시럽 성분이 결합하여 주의 단계에 진입했습니다.", walk: 44, run: 15, bike: 23, rope: 12, tip: "양념 볶음 요리는 소스를 밥에 비벼 먹기보다는 건더기 위주로 드시면 정제 설탕 섭취를 아낄 수 있습니다." },
+            { id: "06-04", day: "6월 4일(목)", menu: ["쇠고기굴소스야채볶음밥 & 계란F", "열무된장국", "양배추샐러드 / 아일랜드 드레싱", "타레카츠 & 소스", "깍두기", "학평간편식(샌드위치 외)"], sugar: 34, status: "high", label: "🔴 높음", desc: "볶음밥 굴소스, 아일랜드 드레싱, 간식용 샌드위치의 가공당이 모두 합쳐져 수치가 매우 높습니다.", walk: 51, run: 17, bike: 27, rope: 14, tip: "샌드위치나 빵 종류가 겹치는 날에는 식사 후 가볍게 운동장을 산책해 혈당 스파이크를 방지하세요." },
+            { id: "06-05", day: "6월 5일(금)", menu: ["쌀밥", "참치김치찌개", "콩나물겨자냉채무침", "돼지갈비옛장구이", "깻잎김치(자율)", "배추김치", "마시는딸기요거트(무가당)"], sugar: 21, status: "safe", label: "🟢 보통", desc: "돼지갈비 양념에 당류가 일부 포함되어 있으나 후식이 무가당 요거트라 전체적으로 안전한 식단입니다.", walk: 31, run: 10, bike: 16, rope: 9, tip: "요거트를 고를 때 무가당(Plain) 제품을 선택하는 것만으로도 청소년기 하루 당류 제한에 큰 도움이 됩니다." }
         ],
         2: [
-            { id: "06-08", day: "6월 8일(월)", menu: ["쌀밥", "유부김치우동국", "돈육계란장조림", "취나물된장무침(자율)", "두부매콤강정", "깍두기", "감귤주스"], sugar: 28, status: "warn", label: "🟠 경고", desc: "두부매콤강정 표면의 물엿 코팅과 후식 액상 감귤주스로 인해 당 수치가 누적되어 주의를 요합니다.", walk: 42, run: 14, bike: 22, rope: 12, tip: "강정이나 조림 소스는 설탕과 조청 비중이 매우 높으니 과다 섭취하지 않도록 조절해 보세요." },
-            { id: "06-09", day: "6월 9일(화)", menu: ["쌀밥", "해물짬뽕국", "꽈리고추양념찜(자율)", "통다리살유린기", "배추김치", "사과당근요구르트", "무말랭이장아찌고추장무침"], sugar: 24, status: "safe", label: "🟢 보통", desc: "단맛 위주의 자극적인 반찬이 없어 이상적이나, 마시는 요구르트 한 개 분량의 유당이 들어있습니다.", walk: 36, run: 12, bike: 19, rope: 10, tip: "유린기 소스를 흥건하게 부어 먹기보다는 가볍게 찍어 먹는 것이 당류와 나트륨을 동시에 줄입니다." },
-            { id: "06-10", day: "6월 10일(수)", menu: ["쌀밥", "돼지국밥(대접)", "아삭고추된장무침(자율)", "핫도그(치즈소시지반)", "부추겉절이", "석박지", "포도슬러시"], sugar: 38, status: "high", label: "🔴 높음", desc: "핫도그에 부가되는 토마토케첩 소스와 액상과당 시럽 덩어리인 포도슬러시 음료 때문에 위험도가 매우 높습니다.", walk: 57, run: 19, bike: 30, rope: 16, tip: "슬러시나 스무디 계열 빙과류는 혈당을 매우 가파르게 스파이크 치게 만들므로 조심하셔야 합니다." },
-            { id: "06-11", day: "6월 11일(목)", menu: ["혼합잡곡밥", "배추국", "열대과일샐러드", "새우까스 & 소스", "두부구이 & 양념장(자율)", "배추김치", "딸기우유"], sugar: 35, status: "high", label: "🔴 높음", desc: "샐러드에 버무려진 통조림 과일 시럽과 가공유(딸기우유) 후식 팩으로 인해 일일 기준치를 초과할 우려가 있습니다.", walk: 53, run: 18, bike: 28, rope: 15, tip: "가공우유 대신 흰 우유를 마시는 습관만으로도 청소년기 당 흡수를 크게 제한합니다." },
+            { id: "06-08", day: "6월 8일(월)", menu: ["쌀밥", "유부김치우동국", "돈육계란장조림", "취나물된장무침(자율)", "두부매콤강정", "깍두기", "감귤주스"], sugar: 28, status: "warn", label: "🟠 경고", desc: "두부매콤강정 표면의 물엿 코팅과 후식 액상 감귤주스로 인해 당 수치가 누적되어 주의를 요합니다.", walk: 42, run: 14, bike: 22, rope: 12, tip: "강정이나 조림 소스는 설탕과 조청 비중이 높으니 소스를 너무 많이 묻혀 먹지 않도록 조절해 보세요." },
+            { id: "06-09", day: "6월 9일(화)", menu: ["쌀밥", "해물짬뽕국", "꽈리고추양념찜(자율)", "통다리살유린기", "배추김치", "사과당근요구르트", "무말랭이장아찌고추장무침"], sugar: 24, status: "safe", label: "🟢 보통", desc: "단맛 위주의 자극적인 반찬이 적어 이상적이나, 마시는 요구르트 한 개 분량의 당이 포함되어 있습니다.", walk: 36, run: 12, bike: 19, rope: 10, tip: "유린기 소스를 흥건하게 부어 먹기보다는 가볍게 찍어 먹는 것이 당류와 나트륨을 동시에 줄입니다." },
+            { id: "06-10", day: "6월 10일(수)", menu: ["쌀밥", "돼지국밥(대접)", "아삭고추된장무침(자율)", "핫도그(치즈소시지반)", "부추겉절이", "석박지", "포도슬러시"], sugar: 38, status: "high", label: "🔴 높음", desc: "핫도그의 토마토케첩 소스와 액상과당 시럽 덩어리인 포도슬러시 음료 때문에 위험도가 매우 높습니다.", walk: 57, run: 19, bike: 30, rope: 16, tip: "슬러시나 스무디 계열 빙과류는 혈당을 매우 가파르게 올리므로 마신 후 꼭 신체 활동을 해주세요." },
+            { id: "06-11", day: "6월 11일(목)", menu: ["혼합잡곡밥", "배추국", "열대과일샐러드", "새우까스 & 소스", "두부구이 & 양념장(자율)", "배추김치", "딸기우유"], sugar: 35, status: "high", label: "🔴 높음", desc: "샐러드에 버무려진 통조림 과일 시럽과 가공유(딸기우유) 후식 팩으로 인해 일일 권장치를 초과할 수 있습니다.", walk: 53, run: 18, bike: 28, rope: 15, tip: "가공우유 대신 흰 우유나 물을 마시는 습관만으로도 일일 당 흡수량을 크게 제한할 수 있습니다." },
             { id: "06-12", day: "6월 12일(금)", menu: ["강황쌀밥", "애플턴오버", "콩나물국", "불어묵조림", "양배추쌈 & 저염두부쌈장(자율)", "대패삼겹살매콤볶음", "배추김치"], sugar: 31, status: "warn", label: "🟠 경고", desc: "달달한 과일잼 파이 제과류인 애플턴오버와 대패삼겹살 볶음 양념 속 감칠맛 설탕량이 누적되었습니다.", walk: 47, run: 16, bike: 25, rope: 13, tip: "매콤한 제육볶음 스타일 요리에도 고기 연육 작업과 윤기를 위해 생각보다 막대한 설탕이 들어갑니다." }
         ],
         3: [
-            { id: "06-15", day: "6월 15일(월)", menu: ["기장밥", "돈육김치찌개", "계란찜", "버섯잡채", "도시락김", "깍두기(셀프)", "씨없는포도"], sugar: 21, status: "safe", label: "🟢 보통", desc: "인공 정제 시럽이 아닌 신선한 자연 생과일(포도)을 후식으로 가미하여 매우 건전하고 안전한 식단입니다.", walk: 31, run: 10, bike: 16, rope: 9, tip: "가공 스낵이나 제과 디저트보다 생과일을 통해 단맛을 충전하는 식습관을 길러보세요." },
-            { id: "06-16", day: "6월 16일(화)", menu: ["쌀밥", "버섯매운탕", "간장찜닭", "양배추샐러드 & D(자율)", "콩나물실파무침", "찹쌀도너츠(수제)", "배추김치"], sugar: 30, status: "warn", label: "🟠 경고", desc: "간장찜닭 베이스의 조림용 요리 물엿과 정제 설탕을 겉면에 듬뿍 바른 찹쌀도너츠의 합산 결과입니다.", walk: 45, run: 15, bike: 24, rope: 13, tip: "밀가루를 기름에 튀긴 후 설탕 옷을 입힌 도너츠류는 식후 급격한 인슐린 과다 분비로 춘곤증을 유발합니다." },
-            { id: "06-17", day: "6월 17일(수)", menu: ["매운고추참치주먹밥", "투움바쉬림프파스타", "오징어브로콜리숙회 & 초장(자율)", "치즈감자도깨비방망이", "배추김치", "오렌지주스", "모듬야채피클"], sugar: 36, status: "high", label: "🔴 높음", desc: "탄수화물 밀집도가 강한 파스타와 설탕 피클, 가공 오렌지주스 내부의 정제 액상과당이 주원인입니다.", walk: 54, run: 18, bike: 29, rope: 15, tip: "100% 과즙 주스라는 문구가 있어도 식이섬유가 파괴되어 설탕물처럼 다이렉트로 흡수되니 조절해 드세요." },
-            { id: "06-18", day: "6월 18일(목)", menu: ["강황쌀밥", "어탕국수", "무초절임", "수제닭튀김", "깻잎김치", "배추김치(셀프)", "푸딩"], sugar: 29, status: "warn", label: "🟠 경고", desc: "수제닭튀김 염지 과정에 포함된 감칠맛 설탕 성분과 디저트로 배정된 젤라틴 푸딩 시럽의 조합 수치입니다.", walk: 43, run: 14, bike: 23, rope: 12, tip: "탱글한 푸딩류는 부피 대비 정제당 압축 비중이 매우 높으므로 한 번에 다 먹지 않는 편이 유익합니다." },
-            { id: "06-19", day: "6월 19일(금)", menu: ["쌀밥", "저칼로리미역국수무침(자율)", "순두부찌개", "양상추샐러드 & 블루베리 드레싱", "멘치까스 & 치즈스틱", "깍두기", "메론밀크라떼"], sugar: 32, status: "high", label: "🔴 높음", desc: "단맛이 과하게 첨가된 블루베리 샐러드 소스 제품과 묵직한 당 시럽 메론밀크라떼 팩 음료의 누계입니다.", walk: 48, run: 16, bike: 25, rope: 14, tip: "액상 시럽이 믹스된 과일맛 음료 대신 갈증이 날 땐 시원한 생수나 보리차를 선택해 보세요." }
+            { id: "06-15", day: "6월 15일(월)", menu: ["기장밥", "돈육김치찌개", "계란찜", "버섯잡채", "도시락김", "깍두기(셀프)", "씨없는포도"], sugar: 18, status: "safe", label: "🟢 안전", desc: "인공 정제 시럽이 아닌 신선한 자연 생과일(포도)을 후식으로 가미하여 매우 건전하고 안전한 식단입니다.", walk: 27, run: 9, bike: 13, rope: 8, tip: "가공 스낵이나 제과 디저트보다 생과일을 통해 단맛을 충전하는 식습관을 길러보세요." },
+            { id: "06-16", day: "6월 16일(화)", menu: ["쌀밥", "버섯매운탕", "간장찜닭", "양배추샐러드 & D(자율)", "콩나물실파무침", "찹쌀도너츠(수제)", "배추김치"], sugar: 32, status: "high", label: "🔴 높음", desc: "간장찜닭의 조림용 물엿과 정제 설탕을 겉면에 듬뿍 바른 수제 찹쌀도너츠의 합산으로 위험도가 높습니다.", walk: 48, run: 16, bike: 25, rope: 14, tip: "기름에 튀긴 후 설탕 옷을 입힌 도너츠류는 식후 급격한 인슐린 분비로 졸음을 쉽게 유발할 수 있습니다." },
+            { id: "06-17", day: "6월 17일(수)", menu: ["매운고추참치주먹밥", "투움바쉬림프파스타", "오징어브로콜리숙회 & 초장(자율)", "치즈감자도깨비방망이", "배추김치", "오렌지주스(100%)", "모듬야채피클"], sugar: 36, status: "high", label: "🔴 높음", desc: "탄수화물 밀집도가 높은 파스타, 설탕 피클, 그리고 오렌지주스 내부의 정제 액상과당이 주원인입니다.", walk: 54, run: 18, bike: 29, rope: 15, tip: "100% 과즙 주스라는 문구가 있어도 섬유질이 없어 설탕물처럼 다이렉트로 흡수되니 조절해 드세요." },
+            { id: "06-18", day: "6월 18일(목)", menu: ["강황쌀밥", "어탕국수", "무초절임", "수제닭튀김(뿌링클)", "깻잎김치", "배추김치(셀프)", "푸딩(S)"], sugar: 30, status: "warn", label: "🟠 경고", desc: "시즈닝 치킨의 단맛 성분과 디저트로 배정된 푸딩 시럽의 조합으로 당 수치가 다소 높게 관측됩니다.", walk: 45, run: 15, bike: 24, rope: 13, tip: "탱글한 푸딩류는 부피 대비 정제당 압축 비중이 매우 높으므로 적당량 섭취하는 것이 유익합니다." },
+            { id: "06-19", day: "6월 19일(금)", menu: ["쌀밥", "저칼로리미역국수무침(자율)", "순두부찌개", "양상추샐러드 & 블루베리 드레싱", "멘치까스 & 치즈스틱", "깍두기", "메론밀크라떼"], sugar: 33, status: "high", label: "🔴 높음", desc: "단맛이 과하게 첨가된 블루베리 샐러드 소스 제품과 묵직한 당 시럽 메론밀크라떼 음료의 누계입니다.", walk: 49, run: 16, bike: 26, rope: 14, tip: "액상 시럽이 믹스된 과일맛 라떼 대신 갈증이 날 땐 시원한 생수나 보리차를 선택해 보세요." }
         ],
         4: [
             { id: "06-22", day: "6월 22일(월)", menu: ["기능성컬러밥", "크림치즈찰떡", "쇠고기미역국", "돼지갈비찜(매콤)", "숙주나물무침", "생선구이 & 양념장(자율)", "배추김치"], sugar: 25, status: "warn", label: "🟠 경고", desc: "매콤달콤한 돼지갈비찜 소스와 앙금이 함축된 크림치즈찰떡 베이커리로 인해 당 수치가 상승했습니다.", walk: 37, run: 12, bike: 20, rope: 11, tip: "찰떡은 정제 탄수화물을 강하게 고농축 압축시킨 형태라 소화 회전율 및 혈당 상승 속도가 가파릅니다." },
-            { id: "06-23", day: "6월 23일(화)", menu: ["기장밥", "근대팽이된장국", "콩나물겨자냉채무침(자율)", "부추전호박전", "훈제오리오븐구이 & 머스터드 소스", "배추김치", "누텔라코코넛토스트"], sugar: 34, status: "high", label: "🔴 높음", desc: "초콜릿 잼인 악마의 누텔라를 다량 도포한 코코넛 토스트 특식 메뉴의 여파로 당 질량이 폭증했습니다.", walk: 51, run: 17, bike: 27, rope: 14, tip: "누텔라 토스트처럼 초고당도 빵류가 배치된 날에는 하교할 때까지 탄산음료나 젤리 군것질을 쉬어주세요." },
-            { id: "06-24", day: "6월 24일(수)", menu: ["김치치즈구운삼각밥(오븐)", "돈코츠라멘(대접)", "해초무생채(자율)", "배추겉절이", "쉬림프꼬치 & 소스", "수박"], sugar: 23, status: "safe", label: "🟢 보통", desc: "스위트 칠리 계열 쉬림프 소스와 여름 수박을 빼면 설탕 조리가 가미되지 않아 가장 이상적인 식단입니다.", walk: 34, run: 11, bike: 18, rope: 9, tip: "제철 수박은 90% 이상이 순수 수분이라 부피 대비 당 흡수 부하가 현저히 낮아 이상적인 여름 과일입니다." },
+            { id: "06-23", day: "6월 23일(화)", menu: ["기장밥", "근대팽이된장국", "콩나물겨자냉채무침(자율)", "부추전호박전", "훈제오리오븐구이 & 머스터드 소스", "배추김치", "누텔라코코넛토스트"], sugar: 39, status: "high", label: "🔴 높음", desc: "초콜릿 잼인 악마의 누텔라를 다량 도포한 코코넛 토스트 특식 메뉴의 여파로 당 질량이 폭증했습니다.", walk: 58, run: 19, bike: 31, rope: 16, tip: "누텔라 토스트처럼 초고당도 빵류가 배치된 날에는 하교할 때까지 탄산음료나 젤리 군것질을 쉬어주세요." },
+            { id: "06-24", day: "6월 24일(수)", menu: ["김치치즈구운삼각밥(오븐)", "돈코츠라멘(대접)", "해초무생채(자율)", "배추겉절이", "쉬림프꼬치 & 소스", "수박"], sugar: 22, status: "safe", label: "🟢 보통", desc: "스위트 칠리 계열 쉬림프 소스와 여름 수박을 빼면 설탕 조리가 가미되지 않아 가장 이상적인 식단입니다.", walk: 33, run: 11, bike: 18, rope: 9, tip: "제철 수박은 90% 이상이 순수 수분이라 부피 대비 당 흡수 부하가 현저히 낮아 이상적인 여름 과일입니다." },
             { id: "06-25", day: "6월 25일(목)", menu: ["쌀밥", "메밀소바(미니)", "양배추샐러드 & 아일랜드 드레싱", "경양식돈까스 & 소스", "깍두기(셀프)", "오렌지파인주스", "모듬야채피클(자율)"], sugar: 37, status: "high", label: "🔴 높음", desc: "돈까스 소스의 단맛 유기물, 메밀 장국 쯔유의 조미 설탕, 오렌지주스의 액상당이 동시에 작용했습니다.", walk: 55, run: 18, bike: 29, rope: 15, tip: "시원한 메밀국수나 가쓰오부시 우동 국물 안에는 맛의 균형을 위해 엄청난 양의 설탕이 가라앉아 있습니다." },
             { id: "06-26", day: "6월 26일(금)", menu: ["쌀밥", "열무된장국", "상추겉절이(자율)", "돈사태김치찜", "오징어링튀김 & 소스", "석박지", "식혜"], sugar: 28, status: "warn", label: "🟠 경고", desc: "전통 방식 엿기름을 달여서 제조된 식혜 음료 내부의 정제당 성분이 합산되어 주의 단계에 고정됩니다.", walk: 42, run: 14, bike: 22, rope: 12, tip: "식혜는 쌀알 정제 전분과 설탕 엑기스가 혼합되어 정밀 혈당 관리를 방해하니 적당히 입가심만 하세요." }
         ],
@@ -175,7 +184,6 @@
         ]
     };
 
-    // UI 업데이트 함수
     function updateUI(itemData) {
         if (!itemData) return;
         
@@ -186,14 +194,13 @@
         document.getElementById('status-badge').className = "status-box " + itemData.status;
         document.getElementById('status-text').innerHTML = itemData.desc;
         
-        document.getElementById('ex-walk').innerHTML = "약 " + itemData.walk + "분";
-        document.getElementById('ex-run').innerHTML = "약 " + itemData.run + "분";
-        document.getElementById('ex-bike').innerHTML = "약 " + itemData.bike + "분";
-        document.getElementById('ex-rope').innerHTML = "약 " + itemData.rope + "분";
+        document.getElementById('ex-walk').innerHTML = itemData.walk + "분";
+        document.getElementById('ex-run').innerHTML = itemData.run + "분";
+        document.getElementById('ex-bike').innerHTML = itemData.bike + "분";
+        document.getElementById('ex-rope').innerHTML = itemData.rope + "분";
         
         document.getElementById('tip-text').innerHTML = itemData.tip;
 
-        // 식단 리스트 초기화 후 업데이트
         const menuUl = document.getElementById('menu-container');
         menuUl.innerHTML = "";
         itemData.menu.forEach(function(m) {
@@ -202,18 +209,16 @@
             menuUl.appendChild(li);
         });
 
-        // 하단 버튼 active 상태 관리
         const allDateBtns = document.querySelectorAll('.date-btn');
-        for (let i = 0; i < allDateBtns.length; i++) {
-            if (allDateBtns[i].getAttribute('data-id') === itemData.id) {
-                allDateBtns[i].classList.add('active');
+        allDateBtns.forEach(function(btn) {
+            if (btn.getAttribute('data-id') === itemData.id) {
+                btn.classList.add('active');
             } else {
-                allDateBtns[i].classList.remove('active');
+                btn.classList.remove('active');
             }
-        }
+        });
     }
 
-    // 주차 선택 및 하단 버튼 생성 함수
     function setWeek(weekNum) {
         for (let i = 1; i <= 5; i++) {
             const btn = document.getElementById('week-btn-' + i);
@@ -242,57 +247,60 @@
         });
     }
 
-    // ==========================================
-    // 🚀 즉시 실행 구역 (자동 날짜 인식 로직 포함)
-    // ==========================================
-    try {
-        // 상단 주차 버튼 클릭 이벤트 바인딩
-        for (let i = 1; i <= 5; i++) {
-            const btn = document.getElementById('week-btn-' + i);
-            if (btn) {
-                btn.onclick = function() {
-                    setWeek(i);
-                    updateUI(mealData[i][0]); // 주차를 바꾸면 해당 주 첫 번째 날짜 자동 표시
-                };
-            }
+    window.onload = function() {
+        // PWA 서비스 워커 등록 스크립트
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(function() { console.log("PWA 서비스 워커 등록 성공!"); })
+                .catch(function(err) { console.log("PWA 서비스 워커 등록 실패: ", err); });
         }
 
-        // 1. 기기의 오늘 날짜 확인 로직
-        const now = new Date();
-        const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
-        const currentDate = String(now.getDate()).padStart(2, '0');
-        const todayId = currentMonth + "-" + currentDate; // 예: "06-02"
-
-        // 2. 오늘 날짜가 6월 식단표 안에 존재하는지 탐색
-        let foundWeek = 1;
-        let foundData = null;
-
-        for (let w = 1; w <= 5; w++) {
-            if (mealData[w]) {
-                for (let i = 0; i < mealData[w].length; i++) {
-                    if (mealData[w][i].id === todayId) {
-                        foundWeek = w;
-                        foundData = mealData[w][i];
-                        break; // 오늘 날짜를 찾으면 종료
-                    }
+        try {
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById('week-btn-' + i);
+                if (btn) {
+                    btn.onclick = function() {
+                        setWeek(i);
+                        if (mealData[i] && mealData[i][0]) {
+                            updateUI(mealData[i][0]);
+                        }
+                    };
                 }
             }
-            if (foundData) break;
+
+            const now = new Date();
+            const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+            const currentDate = String(now.getDate()).padStart(2, '0');
+            const todayId = currentMonth + "-" + currentDate;
+
+            let foundWeek = 1;
+            let foundData = null;
+
+            for (let w = 1; w <= 5; w++) {
+                if (mealData[w]) {
+                    for (let i = 0; i < mealData[w].length; i++) {
+                        if (mealData[w][i].id === todayId) {
+                            foundWeek = w;
+                            foundData = mealData[w][i];
+                            break;
+                        }
+                    }
+                }
+                if (foundData) break;
+            }
+
+            if (!foundData) {
+                foundWeek = 1;
+                foundData = mealData[1][0]; 
+            }
+
+            setWeek(foundWeek);
+            updateUI(foundData);
+
+        } catch (error) {
+            document.getElementById('status-text').innerHTML = "초기 로딩 오류: " + error.message;
         }
-
-        // 3. 만약 오늘이 식단표에 없는 날(주말이나 타 월)이라면 기본값(6월 1일) 세팅
-        if (!foundData) {
-            foundWeek = 1;
-            foundData = mealData[1][0]; 
-        }
-
-        // 4. 찾은 날짜를 기준으로 화면 초기화 및 렌더링
-        setWeek(foundWeek);
-        updateUI(foundData);
-
-    } catch (error) {
-        document.getElementById('status-text').innerHTML = "화면 렌더링 에러가 발생했습니다: " + error.message;
-    }
+    };
 </script>
 </body>
 </html>
