@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sugar Scan - 양산남부고 급식 당류 분석</title>
     
-    <!-- PWA 연결 고리 및 아이폰 지원 설정 -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4a90e2">
     <link rel="apple-touch-icon" href="https://img.icons8.com/fluent/192/000000/sugar-cube.png">
@@ -20,6 +19,7 @@
             --text-main: #333333;
             --text-sub: #666666;
             --accent-color: #4a90e2;
+            --success-color: #10b981;
         }
 
         body {
@@ -92,6 +92,42 @@
         .btn-group { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 12px 2px; margin-top: 8px; -webkit-overflow-scrolling: touch; }
         .date-btn { background-color: #f1f5f9; border: 1px solid #e2e8f0; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
         .date-btn.active { background-color: var(--accent-color); color: white; border-color: var(--accent-color); box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3); }
+
+        /* PWA 앱 설치 버튼 스타일 */
+        .pwa-install-container {
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 20px;
+            margin-top: 24px;
+            text-align: center;
+        }
+        .pwa-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+            transition: transform 0.2s;
+            box-sizing: border-box;
+            display: none; /* 기본적으로는 숨김 (설치 가능할 때만 보임) */
+        }
+        .pwa-btn:active {
+            transform: scale(0.98);
+        }
+        .ios-notice {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.5;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -146,6 +182,14 @@
             <button class="week-btn" id="week-btn-5">5주차</button>
         </div>
         <div class="btn-group" id="date-buttons-container"></div>
+    </div>
+
+    <div class="pwa-install-container">
+        <button id="pwa-button" class="pwa-btn">📱 홈 화면에 Sugar Scan 앱 추가하기</button>
+        <div id="ios-text" class="ios-notice">
+            💡 <b>iPhone/iPad 이용자 안내:</b><br>
+            하단의 <b>[공유하기 버튼 📤]</b>을 누른 뒤 메뉴에서 <b>[홈 화면에 추가]</b>를 선택하시면 바탕화면에 진짜 앱처럼 설치됩니다!
+        </div>
     </div>
 </div>
 
@@ -248,13 +292,60 @@
     }
 
     window.onload = function() {
-        // PWA 서비스 워커 등록 스크립트
+        // PWA 서비스 워커 등록
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
                 .then(function() { console.log("PWA 서비스 워커 등록 성공!"); })
                 .catch(function(err) { console.log("PWA 서비스 워커 등록 실패: ", err); });
         }
 
+        // 📱 앱 설치 버튼 작동 로직
+        let deferredPrompt;
+        const pwaBtn = document.getElementById('pwa-button');
+        const iosText = document.getElementById('ios-text');
+
+        // 아이폰/아이패드 여부 체크하여 안내 문구 표시
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (isIOS) {
+            iosText.style.display = 'block';
+        }
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+            // 브라우저의 기본 설치 팝업을 일시 정지
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // 앱이 설치되어 있지 않은 안드로이드/PC 브라우저에서 버튼 노출
+            pwaBtn.style.display = 'block';
+            if(isIOS) iosText.style.display = 'none'; // 안드로이드라면 iOS 문구 숨김
+
+            pwaBtn.onclick = function() {
+                // 버튼 숨기기
+                pwaBtn.style.display = 'none';
+                // 설치 팝업 띄우기
+                deferredPrompt.prompt();
+                
+                deferredPrompt.userChoice.then(function(choiceResult) {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('사용자가 앱 설치를 동의했습니다.');
+                    } else {
+                        console.log('사용자가 앱 설치를 취소했습니다.');
+                        pwaBtn.style.display = 'block'; // 취소 시 버튼 다시 보여주기
+                    }
+                    deferredPrompt = null;
+                });
+            };
+        });
+
+        // 이미 설치 완료되었을 때 버튼 자동 숨김
+        window.addEventListener('appinstalled', function() {
+            console.log('Sugar Scan 앱이 성공적으로 설치되었습니다!');
+            pwaBtn.style.display = 'none';
+            iosText.style.display = 'none';
+        });
+
+
+        // 기존 데이터 로딩 로직
         try {
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById('week-btn-' + i);
