@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -114,6 +114,34 @@
             box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
         }
 
+        /* 🌟 중식/석식 선택 탭 스타일 */
+        .meal-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 4px;
+            border-radius: 12px;
+        }
+
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 0;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+        }
+
         .card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -218,7 +246,6 @@
         }
         
         #ios-text {
-            /* 기본적으로 보이도록 수정 */
             display: block; 
             text-align: center;
             font-size: 0.85rem;
@@ -254,6 +281,11 @@
     </div>
 
     <div class="date-buttons" id="date-buttons-container"></div>
+
+    <div class="meal-toggle">
+        <button class="toggle-btn active" id="btn-lunch">☀️ 중식</button>
+        <button class="toggle-btn" id="btn-dinner">🌙 석식</button>
+    </div>
 
     <div class="card">
         <div class="menu-title">오늘의 급식 메뉴</div>
@@ -321,23 +353,56 @@
 
 <script>
     let mealData = {}; 
+    let currentMealType = 'lunch'; // 기본값 중식('lunch') 또는 석식('dinner')
+    let selectedItemData = null;   // 현재 선택된 날짜 데이터 덩어리 전체 저장
 
     function updateUI(itemData) {
         if (!itemData) return;
+        selectedItemData = itemData;
         
         document.getElementById('current-date').innerHTML = itemData.day;
-        document.getElementById('sugar-value').innerHTML = itemData.sugar + "g";
         
-        const cubes = (itemData.sugar / 3).toFixed(1);
+        // 중식 또는 석식에 맞는 세부 데이터 추출 (구 규격과의 하위 호환을 위해 없으면 통째로 가져옴)
+        let mealDetails = null;
+        if (itemData.lunch || itemData.dinner) {
+            mealDetails = itemData[currentMealType];
+        } else {
+            if (currentMealType === 'lunch') mealDetails = itemData; // 이전 flat 데이터 방어코드
+        }
+        
+        const menuUl = document.getElementById('menu-container');
+        
+        // 🌟 해당 식단(예: 석식) 정보가 없는 날 처리
+        if (!mealDetails) {
+            document.getElementById('sugar-value').innerHTML = "0g";
+            document.getElementById('sugar-cubes').innerHTML = `각설탕 약 0개`;
+            document.getElementById('calorie-value').innerHTML = "0 kcal";
+            document.getElementById('calorie-level').innerHTML = "정보 없음";
+            document.getElementById('calorie-level').style.color = "#6b7280";
+            document.getElementById('status-badge').innerHTML = "⚪ 없음";
+            document.getElementById('status-badge').className = "status-box";
+            document.getElementById('status-text').innerHTML = `${currentMealType === 'lunch' ? '중식' : '석식'} 식단 데이터가 등록되지 않았습니다.`;
+            
+            document.getElementById('ex-walk').innerHTML = "0분";
+            document.getElementById('ex-run').innerHTML = "0분";
+            document.getElementById('ex-bike').innerHTML = "0분";
+            document.getElementById('ex-rope').innerHTML = "0분";
+            menuUl.innerHTML = "<li>등록된 메뉴가 없습니다.</li>";
+            return;
+        }
+        
+        // 데이터 정상 렌더링
+        document.getElementById('sugar-value').innerHTML = mealDetails.sugar + "g";
+        const cubes = (mealDetails.sugar / 3).toFixed(1);
         document.getElementById('sugar-cubes').innerHTML = `각설탕 약 ${cubes}개`;
-        document.getElementById('calorie-value').innerHTML = itemData.kcal + " kcal";
+        document.getElementById('calorie-value').innerHTML = mealDetails.kcal + " kcal";
         
         let kcalLevel = "";
         let kcalColor = "";
-        if (itemData.kcal > 860) {
+        if (mealDetails.kcal > 860) {
             kcalLevel = "열량 높음";
             kcalColor = "#ef4444";
-        } else if (itemData.kcal >= 780) {
+        } else if (mealDetails.kcal >= 780) {
             kcalLevel = "열량 보통";
             kcalColor = "#f59e0b";
         } else {
@@ -349,23 +414,26 @@
         calLevelEl.innerHTML = kcalLevel;
         calLevelEl.style.color = kcalColor;
         
-        document.getElementById('status-badge').innerHTML = itemData.label;
-        document.getElementById('status-badge').className = "status-box " + itemData.status;
-        document.getElementById('status-text').innerHTML = itemData.desc;
+        document.getElementById('status-badge').innerHTML = mealDetails.label;
+        document.getElementById('status-badge').className = "status-box " + mealDetails.status;
+        document.getElementById('status-text').innerHTML = mealDetails.desc;
         
-        document.getElementById('ex-walk').innerHTML = itemData.walk + "분";
-        document.getElementById('ex-run').innerHTML = itemData.run + "분";
-        document.getElementById('ex-bike').innerHTML = itemData.bike + "분";
-        document.getElementById('ex-rope').innerHTML = itemData.rope + "분";
-        document.getElementById('tip-text').innerHTML = itemData.tip;
+        document.getElementById('ex-walk').innerHTML = mealDetails.walk + "분";
+        document.getElementById('ex-run').innerHTML = mealDetails.run + "분";
+        document.getElementById('ex-bike').innerHTML = mealDetails.bike + "분";
+        document.getElementById('ex-rope').innerHTML = mealDetails.rope + "분";
+        if (mealDetails.tip) document.getElementById('tip-text').innerHTML = mealDetails.tip;
 
-        const menuUl = document.getElementById('menu-container');
         menuUl.innerHTML = "";
-        itemData.menu.forEach(function(m) {
-            const li = document.createElement('li');
-            li.innerHTML = m;
-            menuUl.appendChild(li);
-        });
+        if (mealDetails.menu && mealDetails.menu.length > 0) {
+            mealDetails.menu.forEach(function(m) {
+                const li = document.createElement('li');
+                li.innerHTML = m;
+                menuUl.appendChild(li);
+            });
+        } else {
+            menuUl.innerHTML = "<li>등록된 메뉴가 없습니다.</li>";
+        }
 
         const allDateBtns = document.querySelectorAll('.date-btn');
         allDateBtns.forEach(function(btn) {
@@ -430,7 +498,6 @@
 
             let foundWeek = 1;
             let foundData = null;
-            
             let closestFutureWeek = null;
             let closestFutureData = null;
 
@@ -480,11 +547,25 @@
                 .then(function() { console.log("PWA 서비스 워커 등록 성공!"); });
         }
 
+        // 🌟 중식/석식 버튼 클릭 이벤트 연결
+        document.getElementById('btn-lunch').onclick = function() {
+            currentMealType = 'lunch';
+            this.classList.add('active');
+            document.getElementById('btn-dinner').classList.remove('active');
+            updateUI(selectedItemData);
+        };
+
+        document.getElementById('btn-dinner').onclick = function() {
+            currentMealType = 'dinner';
+            this.classList.add('active');
+            document.getElementById('btn-lunch').classList.remove('active');
+            updateUI(selectedItemData);
+        };
+
         let deferredPrompt;
         const pwaBtn = document.getElementById('pwa-button');
         const iosText = document.getElementById('ios-text');
 
-        // 홈 화면에 진짜로 '추가된 상태(standalone)'일 때만 안내문을 완전히 숨김
         if (window.matchMedia('(display-mode: standalone)').matches) {
             iosText.style.display = 'none';
         }
@@ -493,7 +574,7 @@
             e.preventDefault();
             deferredPrompt = e;
             pwaBtn.style.display = 'block';
-            iosText.style.display = 'none'; // 안드로이드 크롬 등 기기에서는 iOS 안내문 숨기기
+            iosText.style.display = 'none';
 
             pwaBtn.onclick = function() {
                 pwaBtn.style.display = 'none';
@@ -512,7 +593,7 @@
                 initApp(); 
             })
             .catch(error => {
-                document.getElementById('status-text').innerHTML = "식단 데이터를 실시간으로 가져오지 못했습니다. 파일명을 확인해 주시거나 잠시 후 다시 시도해 주세요.";
+                document.getElementById('status-text').innerHTML = "식단 데이터를 가져오지 못했습니다. menu.json 구조나 경로를 확인해 주세요.";
             });
     };
 </script>
