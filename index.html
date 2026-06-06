@@ -228,7 +228,7 @@
             line-height: 1.4;
         }
 
-        /* 🌟 [추가됨] 이미 폰에 설치되어 앱 모드로 실행 중일 때는 하단 설치 레이아웃을 흔적도 없이 숨깁니다 */
+        /* 앱 실행(독립 모드) 상태일 때는 다운로드 안내 버튼을 화면에서 완전 제외 */
         @media (display-mode: standalone) {
             #pwa-button, #ios-text {
                 display: none !important;
@@ -386,100 +386,4 @@
 
         days.forEach(function(d) {
             const btn = document.createElement('button');
-            btn.className = "date-btn";
-            btn.setAttribute('data-id', d.id);
-            btn.innerHTML = d.day.split('(')[0].trim();
-            
-            btn.onclick = function() { updateUI(d); };
-            btnContainer.appendChild(btn);
-        });
-    }
-
-    function initApp() {
-        try {
-            for (let i = 1; i <= 5; i++) {
-                const btn = document.getElementById('week-btn-' + i);
-                if (btn) {
-                    btn.onclick = function() {
-                        setWeek(i);
-                        if (mealData[i] && mealData[i][0]) updateUI(mealData[i][0]);
-                    };
-                }
-            }
-
-            const now = new Date();
-            const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
-            const currentDate = String(now.getDate()).padStart(2, '0');
-            const todayId = currentMonth + "-" + currentDate;
-
-            let foundWeek = 1;
-            let foundData = null;
-
-            for (let w = 1; w <= 5; w++) {
-                if (mealData[w]) {
-                    for (let i = 0; i < mealData[w].length; i++) {
-                        if (mealData[w][i].id === todayId) {
-                            foundWeek = w;
-                            foundData = mealData[w][i];
-                            break;
-                        }
-                    }
-                }
-                if (foundData) break;
-            }
-
-            if (!foundData) {
-                foundWeek = 1;
-                foundData = mealData[1][0]; 
-            }
-
-            setWeek(foundWeek);
-            updateUI(foundData);
-
-        } catch (error) {
-            document.getElementById('status-text').innerHTML = "초기화 오류: " + error.message;
-        }
-    }
-
-    window.onload = function() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(function() { console.log("PWA 서비스 워커 등록 성공!"); });
-        }
-
-        let deferredPrompt;
-        const pwaBtn = document.getElementById('pwa-button');
-        const iosText = document.getElementById('ios-text');
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        
-        if (isIOS) iosText.style.display = 'block';
-
-        window.addEventListener('beforeinstallprompt', function(e) {
-            e.preventDefault();
-            deferredPrompt = e;
-            pwaBtn.style.display = 'block';
-            if(isIOS) iosText.style.display = 'none';
-
-            pwaBtn.onclick = function() {
-                pwaBtn.style.display = 'none';
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(function() { deferredPrompt = null; });
-            };
-        });
-
-        fetch('menu.json?v=' + Date.now())
-            .then(response => {
-                if (!response.ok) throw new Error('네트워크 응답 없음');
-                return response.json();
-            })
-            .then(data => {
-                mealData = data;
-                initApp(); 
-            })
-            .catch(error => {
-                document.getElementById('status-text').innerHTML = "식단 데이터를 실시간으로 가져오지 못했습니다. 파일명을 확인해 주시거나 잠시 후 다시 시도해 주세요.";
-            });
-    };
-</script>
-</body>
-</html>
+            btn.className = "date-btn
