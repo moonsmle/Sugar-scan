@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -218,14 +218,17 @@
         }
         
         #ios-text {
-            display: none;
+            /* 기본적으로 보이도록 수정 */
+            display: block; 
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #4f46e5;
             background: white;
-            padding: 10px;
-            border-radius: 10px;
-            line-height: 1.4;
+            padding: 14px;
+            border-radius: 12px;
+            line-height: 1.5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 2px dashed #4f46e5;
         }
 
         @media (display-mode: standalone) {
@@ -253,6 +256,11 @@
     <div class="date-buttons" id="date-buttons-container"></div>
 
     <div class="card">
+        <div class="menu-title">오늘의 급식 메뉴</div>
+        <ul id="menu-container"></ul>
+    </div>
+
+    <div class="card">
         <div class="dashboard-header">
             <span id="current-date">-월 -일(-)</span>
             <span id="status-badge" class="status-box safe">🟢 보통</span>
@@ -272,11 +280,6 @@
         </div>
 
         <div id="status-text">식단 데이터를 불러오는 중입니다...</div>
-    </div>
-
-    <div class="card">
-        <div class="menu-title">오늘의 급식 메뉴</div>
-        <ul id="menu-container"></ul>
     </div>
 
     <div class="card">
@@ -307,7 +310,13 @@
     </div>
 
     <button id="pwa-button">📱 홈 화면에 앱 추가하기</button>
-    <div id="ios-text">💡 <b>iPhone/iPad 설치 방법:</b> 하단 공유 버튼[⎋]을 누른 후 <b>'홈 화면에 추가'</b>를 선택해 주세요.</div>
+    
+    <div id="ios-text">
+        💡 <b>아이폰/아이패드 사용자 안내</b><br>
+        반드시 <b>사파리(Safari) 브라우저</b>로 접속해야 홈 화면 추가가 가능합니다.<br>
+        (카카오톡, 네이버 등 인앱 브라우저라면 오른쪽 아래 버튼을 눌러 <b>'Safari로 열기'</b>를 해주세요!)<br><br>
+        사파리 화면 하단의 <b>공유 버튼[⎋]</b>을 누른 후 <b>'홈 화면에 추가'</b>를 선택하시면 앱처럼 설치됩니다.
+    </div>
 </div>
 
 <script>
@@ -396,7 +405,6 @@
 
     function initApp() {
         try {
-            // 🌟 날짜 ID("06-01" 또는 "6-1")를 대소비교 가능한 순수 숫자(601)로 바꿔주는 안전장치 함수
             function dateToNum(idStr) {
                 if (!idStr || typeof idStr !== 'string') return 0;
                 const parts = idStr.split('-');
@@ -418,7 +426,7 @@
             const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
             const currentDate = String(now.getDate()).padStart(2, '0');
             const todayId = currentMonth + "-" + currentDate;
-            const todayNum = dateToNum(todayId); // 예: 오늘이 6월 7일이면 607
+            const todayNum = dateToNum(todayId);
 
             let foundWeek = 1;
             let foundData = null;
@@ -433,12 +441,10 @@
                         const itemNum = dateToNum(item.id);
                         
                         if (itemNum === todayNum) {
-                            // 오늘 날짜와 완전히 일치하는 급식이 있다면 선택
                             foundWeek = w;
                             foundData = item;
                             break;
                         } else if (itemNum > todayNum) {
-                            // 오늘보다 미래의 날짜인 경우, 그 중 가장 오늘과 가까운 날짜를 기록
                             const currentClosestNum = closestFutureData ? dateToNum(closestFutureData.id) : Infinity;
                             if (itemNum < currentClosestNum) {
                                 closestFutureWeek = w;
@@ -450,14 +456,11 @@
                 if (foundData) break;
             }
 
-            // 주말/공휴일이라 오늘 급식이 없는 경우
             if (!foundData) {
                 if (closestFutureData) {
-                    // 가장 가까운 다음 급식일 자동 지정 (예: 주말에 켜면 월요일 식단 자동 노출)
                     foundWeek = closestFutureWeek;
                     foundData = closestFutureData;
                 } else {
-                    // 미래 급식 데이터가 더 없다면 1주차 첫 번째 날로 세팅
                     foundWeek = 1;
                     foundData = mealData[1][0]; 
                 }
@@ -480,15 +483,17 @@
         let deferredPrompt;
         const pwaBtn = document.getElementById('pwa-button');
         const iosText = document.getElementById('ios-text');
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        
-        if (isIOS) iosText.style.display = 'block';
+
+        // 홈 화면에 진짜로 '추가된 상태(standalone)'일 때만 안내문을 완전히 숨김
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            iosText.style.display = 'none';
+        }
 
         window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
             deferredPrompt = e;
             pwaBtn.style.display = 'block';
-            if(isIOS) iosText.style.display = 'none';
+            iosText.style.display = 'none'; // 안드로이드 크롬 등 기기에서는 iOS 안내문 숨기기
 
             pwaBtn.onclick = function() {
                 pwaBtn.style.display = 'none';
