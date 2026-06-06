@@ -59,7 +59,6 @@
             gap: 6px;
         }
 
-        /* 주차 선택 탭 */
         .week-tabs {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -87,7 +86,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        /* 일자 선택 버튼 */
         .date-buttons {
             display: flex;
             gap: 8px;
@@ -116,7 +114,6 @@
             box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
         }
 
-        /* 카드 공통 스타일 */
         .card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -125,7 +122,6 @@
             border: 1px solid rgba(255, 255, 255, 0.7);
         }
 
-        /* 메인 대시보드 */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -178,7 +174,6 @@
             border-left: 4px solid #3b82f6;
         }
 
-        /* 급식 메뉴 */
         .menu-title { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: #374151; }
         #menu-container {
             list-style: none;
@@ -194,7 +189,6 @@
             color: #4b5563;
         }
 
-        /* 운동 소모 팁 */
         .exercise-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -209,7 +203,6 @@
 
         #tip-text { font-size: 0.85rem; color: #047857; background: #ecfdf5; padding: 10px; border-radius: 8px; margin-top: 10px; }
 
-        /* PWA 설치 안내 */
         #pwa-button {
             display: none;
             width: 100%;
@@ -223,6 +216,7 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
+        
         #ios-text {
             display: none;
             text-align: center;
@@ -232,6 +226,13 @@
             padding: 10px;
             border-radius: 10px;
             line-height: 1.4;
+        }
+
+        /* 🌟 [추가됨] 이미 폰에 설치되어 앱 모드로 실행 중일 때는 하단 설치 레이아웃을 흔적도 없이 숨깁니다 */
+        @media (display-mode: standalone) {
+            #pwa-button, #ios-text {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -250,8 +251,7 @@
         <button class="week-btn" id="week-btn-5">5주차</button>
     </div>
 
-    <div class="date-buttons" id="date-buttons-container">
-        </div>
+    <div class="date-buttons" id="date-buttons-container"></div>
 
     <div class="card">
         <div class="dashboard-header">
@@ -277,8 +277,7 @@
 
     <div class="card">
         <div class="menu-title">오늘의 급식 메뉴</div>
-        <ul id="menu-container">
-            </ul>
+        <ul id="menu-container"></ul>
     </div>
 
     <div class="card">
@@ -300,7 +299,7 @@
                 <div class="ex-time" id="ex-bike">0분</div>
             </div>
             <div class="ex-item">
-                <div class="ex-icon">跳</div>
+                <div class="ex-icon">🏃‍♀️</div>
                 <div class="ex-name">줄넘기</div>
                 <div class="ex-time" id="ex-rope">0분</div>
             </div>
@@ -313,10 +312,8 @@
 </div>
 
 <script>
-    // 🌟 식단 데이터를 저장할 빈 객체 선언 (외부 menu.json에서 실시간으로 로드)
     let mealData = {}; 
 
-    // 화면 UI 업데이트 함수
     function updateUI(itemData) {
         if (!itemData) return;
         
@@ -372,7 +369,6 @@
         });
     }
 
-    // 주차 선택 기능 구현
     function setWeek(weekNum) {
         for (let i = 1; i <= 5; i++) {
             const btn = document.getElementById('week-btn-' + i);
@@ -399,7 +395,6 @@
         });
     }
 
-    // 앱 초기화 및 오늘 날짜 급식 추적
     function initApp() {
         try {
             for (let i = 1; i <= 5; i++) {
@@ -447,17 +442,16 @@
     }
 
     window.onload = function() {
-        // 서비스 워커 등록 코드
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
                 .then(function() { console.log("PWA 서비스 워커 등록 성공!"); });
         }
 
-        // PWA 설치 버튼 제어
         let deferredPrompt;
         const pwaBtn = document.getElementById('pwa-button');
         const iosText = document.getElementById('ios-text');
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        
         if (isIOS) iosText.style.display = 'block';
 
         window.addEventListener('beforeinstallprompt', function(e) {
@@ -473,8 +467,6 @@
             };
         });
 
-        // 🌟 [핵심 수정한 부분] 매번 실행 시 브라우저 캐시를 무시하고 
-        // 최신 버전의 menu.json 데이터를 강력하게 네트워크에서 긁어오도록 연동합니다.
         fetch('menu.json?v=' + Date.now())
             .then(response => {
                 if (!response.ok) throw new Error('네트워크 응답 없음');
@@ -485,7 +477,7 @@
                 initApp(); 
             })
             .catch(error => {
-                document.getElementById('status-text').innerHTML = "식단 데이터를 실시간으로 가져오지 못했습니다. (네트워크 연결 끊김 또는 데이터 오프라인 상태)";
+                document.getElementById('status-text').innerHTML = "식단 데이터를 실시간으로 가져오지 못했습니다. 파일명을 확인해 주시거나 잠시 후 다시 시도해 주세요.";
             });
     };
 </script>
