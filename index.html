@@ -408,12 +408,13 @@
             return;
         }
         
-        document.getElementById('sugar-value').innerHTML = mealDetails.sugar + "g";
-        const cubes = (mealDetails.sugar / 3).toFixed(1);
+        // 1. 기존 데이터 화면 맵핑
+        const sugarVal = mealDetails.sugar !== undefined ? parseFloat(mealDetails.sugar) : 0;
+        document.getElementById('sugar-value').innerHTML = sugarVal + "g";
+        const cubes = (sugarVal / 3).toFixed(1);
         document.getElementById('sugar-cubes').innerHTML = `각설탕 약 ${cubes}개`;
         document.getElementById('calorie-value').innerHTML = mealDetails.kcal + " kcal";
         
-        // 탄단지 데이터 정상 화면 맵핑
         document.getElementById('carbs-value').innerHTML = (mealDetails.carbs || 0) + "g";
         document.getElementById('protein-value').innerHTML = (mealDetails.protein || 0) + "g";
         document.getElementById('fat-value').innerHTML = (mealDetails.fat || 0) + "g";
@@ -435,15 +436,32 @@
         calLevelEl.innerHTML = kcalLevel;
         calLevelEl.style.color = kcalColor;
         
-        document.getElementById('status-badge').innerHTML = mealDetails.label;
-        document.getElementById('status-badge').className = "status-box " + mealDetails.status;
-        document.getElementById('status-text').innerHTML = mealDetails.desc;
+        document.getElementById('status-badge').innerHTML = mealDetails.label || "⚪ 정보 없음";
+        document.getElementById('status-badge').className = "status-box " + (mealDetails.status || "");
         
-        document.getElementById('ex-walk').innerHTML = mealDetails.walk + "분";
-        document.getElementById('ex-run').innerHTML = mealDetails.run + "분";
-        document.getElementById('ex-bike').innerHTML = mealDetails.bike + "분";
-        document.getElementById('ex-rope').innerHTML = mealDetails.rope + "분";
-        if (mealDetails.tip) document.getElementById('tip-text').innerHTML = mealDetails.tip;
+        // 2. 💡 [식단 설명 및 팁 undefined 방어 연동]
+        // 6월달 메뉴 코드(JSON)에 추가했던 'tip' 또는 기존 'desc' 필드를 순서대로 매핑합니다.
+        const mealTip = mealDetails.tip || mealDetails.desc || `오늘 섭취하는 당류는 총 ${sugarVal}g입니다. 건강한 하루 보내세요!`;
+        document.getElementById('status-text').innerHTML = mealTip;
+        
+        // 하단 초록색 고정 안내 영역도 tip 데이터가 있으면 연동하고, 없으면 기본 안내 문구를 띄웁니다.
+        if (mealDetails.tip) {
+            document.getElementById('tip-text').innerHTML = mealDetails.tip;
+        } else {
+            document.getElementById('tip-text').innerHTML = "매점 이용을 줄이면 청소년기 건강 관리에 큰 도움이 됩니다.";
+        }
+        
+        // 3. 💡 [운동 수치 undefined 방어 및 실시간 연산 적용]
+        // 데이터에 직접 소모 시간 정보(walk, run 등)가 정의되어 있지 않은 날은 당 함량 기반으로 자동 세팅합니다.
+        const walkMin = mealDetails.walk !== undefined ? mealDetails.walk : Math.round(sugarVal * 2.5);
+        const runMin = mealDetails.run !== undefined ? mealDetails.run : Math.round(sugarVal * 1.0);
+        const bikeMin = mealDetails.bike !== undefined ? mealDetails.bike : Math.round(sugarVal * 1.8);
+        const ropeMin = mealDetails.rope !== undefined ? mealDetails.rope : Math.round(sugarVal * 0.8);
+
+        document.getElementById('ex-walk').innerHTML = walkMin + "분";
+        document.getElementById('ex-run').innerHTML = runMin + "분";
+        document.getElementById('ex-bike').innerHTML = bikeMin + "분";
+        document.getElementById('ex-rope').innerHTML = ropeMin + "분";
 
         menuUl.innerHTML = "";
         if (mealDetails.menu && mealDetails.menu.length > 0) {
