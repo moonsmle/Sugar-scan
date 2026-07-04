@@ -21,7 +21,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -45,75 +45,231 @@
             padding-bottom: 40px;
         }
 
-        header { text-align: center; padding: 10px 0; }
-        header h1 { font-size: 1.5rem; color: #312e81; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        header {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: #312e81;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
 
         .week-tabs {
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
-            background: rgba(255, 255, 255, 0.5); padding: 4px; border-radius: 12px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 4px;
+            border-radius: 12px;
         }
-        .week-btn {
-            background: transparent; border: none; padding: 10px 0; font-size: 0.85rem;
-            font-weight: 600; color: var(--text-sub); border-radius: 8px; cursor: pointer; transition: all 0.2s;
-        }
-        .week-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-        .date-buttons { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0; scrollbar-width: none; }
-        .date-buttons::-webkit-scrollbar { display: none; }
-        .date-btn {
-            background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.05);
-            padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; white-space: nowrap; color: var(--text-sub); cursor: pointer;
+        .week-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        .date-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 6px rgba(79,70,229,0.2); }
+
+        .week-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .date-buttons {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 0;
+            scrollbar-width: none;
+        }
+        .date-buttons::-webkit-scrollbar { display: none; }
+
+        .date-btn {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            border-radius: 20px;
+            white-space: nowrap;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .date-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
 
         .meal-toggle {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-            background: rgba(255,255,255,0.6); padding: 4px; border-radius: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 4px;
+            border-radius: 12px;
         }
-        .toggle-btn { background: transparent; border: none; padding: 10px 0; font-size: 0.9rem; font-weight: 700; color: var(--text-sub); border-radius: 8px; cursor: pointer; }
-        .toggle-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(79,70,229,0.2); }
 
-        .card { background: var(--card-bg); border-radius: 16px; padding: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.04); border: 1px solid rgba(255,255,255,0.7); }
-        
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f3f4f6; padding-bottom: 10px; }
-        #current-date { font-weight: 700; font-size: 1.1rem; }
-        
-        .status-box { padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: white; }
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 0;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #f3f4f6;
+            padding-bottom: 10px;
+        }
+
+        #current-date {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .status-box {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+        }
         .status-box.safe { background-color: #10b981; }
         .status-box.warn { background-color: #f59e0b; }
         .status-box.high { background-color: #ef4444; }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; text-align: center; margin-bottom: 12px; }
-        .stat-item { background: #f9fafb; padding: 12px; border-radius: 12px; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-item {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 12px;
+        }
         .stat-item p { font-size: 0.8rem; color: var(--text-sub); margin-bottom: 4px; }
         .stat-value { font-size: 1.4rem; font-weight: 800; color: #111827; }
-        
-        /* 🌟 새로 추가된 탄단지 패널 스타일 */
-        .macro-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; text-align: center; }
-        .macro-item { padding: 10px; border-radius: 12px; }
-        .macro-item.carbs { background: #fdf4ff; }
-        .macro-item.protein { background: #eff6ff; }
-        .macro-item.fat { background: #fffbeb; }
-        .macro-title { font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; }
-        .macro-item.carbs .macro-title { color: #86198f; }
-        .macro-item.protein .macro-title { color: #1d4ed8; }
-        .macro-item.fat .macro-title { color: #b45309; }
-        .macro-val { font-size: 1.1rem; font-weight: 800; }
-        .macro-item.carbs .macro-val { color: #4a044e; }
-        .macro-item.protein .macro-val { color: #1e3a8a; }
-        .macro-item.fat .macro-val { color: #78350f; }
+        .stat-sub { font-size: 0.75rem; color: #6b7280; margin-top: 2px; }
 
-        #status-text { font-size: 0.9rem; line-height: 1.5; color: var(--text-sub); background: #eff6ff; padding: 12px; border-radius: 10px; border-left: 4px solid #3b82f6; }
+        #status-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-sub);
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
 
         .menu-title { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: #374151; }
-        #menu-container { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        #menu-container li { background: #f3f4f6; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; color: #4b5563; }
+        #menu-container {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        #menu-container li {
+            background: #f3f4f6;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #4b5563;
+        }
+
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .ex-item { background: #f9fafb; padding: 10px 4px; border-radius: 10px; }
+        .ex-icon { font-size: 1.2rem; margin-bottom: 2px; }
+        .ex-name { font-size: 0.7rem; color: #6b7280; }
+        .ex-time { font-size: 0.85rem; font-weight: 700; color: #1f2937; margin-top: 2px; }
+
+        #tip-text { font-size: 0.85rem; color: #047857; background: #ecfdf5; padding: 10px; border-radius: 8px; margin-top: 10px; }
+
+        #pwa-button {
+            display: none;
+            width: 100%;
+            background: #1e1b4b;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        #ios-text {
+            display: block; 
+            text-align: center;
+            font-size: 0.85rem;
+            color: #4f46e5;
+            background: white;
+            padding: 14px;
+            border-radius: 12px;
+            line-height: 1.5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 2px dashed #4f46e5;
+        }
+
+        @media (display-mode: standalone) {
+            #pwa-button, #ios-text {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <header><h1><img src="https://img.icons8.com/fluent/32/000000/sugar-cube.png" alt="cube"> Sugar Scan</h1></header>
+    <header>
+        <h1><img src="https://img.icons8.com/fluent/32/000000/sugar-cube.png" alt="cube"> Sugar Scan</h1>
+    </header>
 
     <div class="week-tabs">
         <button class="week-btn active" id="week-btn-1">1주차</button>
@@ -138,36 +294,74 @@
     <div class="card">
         <div class="dashboard-header">
             <span id="current-date">-월 -일(-)</span>
-            <span id="status-badge" class="status-box safe">🟢 대기중</span>
+            <span id="status-badge" class="status-box safe">🟢 보통</span>
         </div>
         
         <div class="stats-grid">
             <div class="stat-item">
                 <p>총 당류 함량</p>
-                <div class="stat-value" id="sugar-value" style="color: #ef4444;">0g</div>
+                <div class="stat-value" id="sugar-value">0g</div>
+                <div class="stat-sub" id="sugar-cubes">각설탕 약 0개</div>
             </div>
             <div class="stat-item">
                 <p>총 열량</p>
                 <div class="stat-value" id="calorie-value">0 kcal</div>
+                <div class="stat-sub" id="calorie-level" style="font-weight:700;">열량 보통</div>
             </div>
         </div>
 
-        <div class="macro-grid">
-            <div class="macro-item carbs">
-                <div class="macro-title">🍚 탄수화물</div>
-                <div class="macro-val" id="carbs-value">0g</div>
+        <div class="macro-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; margin-bottom: 16px;">
+            <div class="stat-item" style="background: #fdf4ff; padding: 10px 4px;">
+                <p style="color: #a21caf; font-size: 0.75rem; font-weight: 700; margin-bottom: 2px;">🍚 탄수화물</p>
+                <div class="stat-value" id="carbs-value" style="font-size: 1.1rem; font-weight: 700;">0g</div>
             </div>
-            <div class="macro-item protein">
-                <div class="macro-title">🥩 단백질</div>
-                <div class="macro-val" id="protein-value">0g</div>
+            <div class="stat-item" style="background: #eff6ff; padding: 10px 4px;">
+                <p style="color: #1d4ed8; font-size: 0.75rem; font-weight: 700; margin-bottom: 2px;">🥩 단백질</p>
+                <div class="stat-value" id="protein-value" style="font-size: 1.1rem; font-weight: 700;">0g</div>
             </div>
-            <div class="macro-item fat">
-                <div class="macro-title">🥑 지방</div>
-                <div class="macro-val" id="fat-value">0g</div>
+            <div class="stat-item" style="background: #fffbeb; padding: 10px 4px;">
+                <p style="color: #b45309; font-size: 0.75rem; font-weight: 700; margin-bottom: 2px;">🥑 지방</p>
+                <div class="stat-value" id="fat-value" style="font-size: 1.1rem; font-weight: 700;">0g</div>
             </div>
         </div>
 
         <div id="status-text">식단 데이터를 불러오는 중입니다...</div>
+    </div>
+
+    <div class="card">
+        <div class="menu-title">이만큼 먹은 당을 소모하려면?</div>
+        <div class="exercise-grid">
+            <div class="ex-item">
+                <div class="ex-icon">🚶</div>
+                <div class="ex-name">걷기</div>
+                <div class="ex-time" id="ex-walk">0분</div>
+            </div>
+            <div class="ex-item">
+                <div class="ex-icon">🏃</div>
+                <div class="ex-name">달리기</div>
+                <div class="ex-time" id="ex-run">0분</div>
+            </div>
+            <div class="ex-item">
+                <div class="ex-icon">🚴</div>
+                <div class="ex-name">자전거</div>
+                <div class="ex-time" id="ex-bike">0분</div>
+            </div>
+            <div class="ex-item">
+                <div class="ex-icon">🏃‍♀️</div>
+                <div class="ex-name">줄넘기</div>
+                <div class="ex-time" id="ex-rope">0분</div>
+            </div>
+        </div>
+        <div id="tip-text">매점 이용을 줄이면 청소년기 건강 관리에 큰 도움이 됩니다.</div>
+    </div>
+
+    <button id="pwa-button">📱 홈 화면에 앱 추가하기</button>
+    
+    <div id="ios-text">
+        💡 <b>아이폰/아이패드 사용자 안내</b><br>
+        반드시 <b>사파리(Safari) 브라우저</b>로 접속해야 홈 화면 추가가 가능합니다.<br>
+        (카카오톡, 네이버 등 인앱 브라우저라면 오른쪽 아래 버튼을 눌러 <b>'Safari로 열기'</b>를 해주세요!)<br><br>
+        사파리 화면 하단의 <b>공유 버튼[⎋]</b>을 누른 후 <b>'홈 화면에 추가'</b>를 선택하시면 앱처럼 설치됩니다.
     </div>
 </div>
 
@@ -179,56 +373,96 @@
     function updateUI(itemData) {
         if (!itemData) return;
         selectedItemData = itemData;
+        
         document.getElementById('current-date').innerHTML = itemData.day;
         
-        let mealDetails = itemData[currentMealType];
+        let mealDetails = null;
+        if (itemData.lunch || itemData.dinner) {
+            mealDetails = itemData[currentMealType];
+        } else {
+            if (currentMealType === 'lunch') mealDetails = itemData; 
+        }
+        
         const menuUl = document.getElementById('menu-container');
         
         if (!mealDetails) {
             document.getElementById('sugar-value').innerHTML = "0g";
+            document.getElementById('sugar-cubes').innerHTML = `각설탕 약 0개`;
             document.getElementById('calorie-value').innerHTML = "0 kcal";
+            document.getElementById('calorie-level').innerHTML = "정보 없음";
+            document.getElementById('calorie-level').style.color = "#6b7280";
+            document.getElementById('status-badge').innerHTML = "⚪ 없음";
+            document.getElementById('status-badge').className = "status-box";
+            document.getElementById('status-text').innerHTML = `${currentMealType === 'lunch' ? '중식' : '석식'} 식단 데이터가 등록되지 않았습니다.`;
             
-            // 데이터 없을 때 탄단지 0g 처리
+            // 데이터 없을 때 탄단지 초기화
             document.getElementById('carbs-value').innerHTML = "0g";
             document.getElementById('protein-value').innerHTML = "0g";
             document.getElementById('fat-value').innerHTML = "0g";
 
-            document.getElementById('status-badge').innerHTML = "⚪ 없음";
-            document.getElementById('status-badge').className = "status-box";
-            document.getElementById('status-text').innerHTML = `${currentMealType === 'lunch' ? '중식' : '석식'} 식단 데이터가 등록되지 않았습니다.`;
+            document.getElementById('ex-walk').innerHTML = "0분";
+            document.getElementById('ex-run').innerHTML = "0분";
+            document.getElementById('ex-bike').innerHTML = "0분";
+            document.getElementById('ex-rope').innerHTML = "0분";
             menuUl.innerHTML = "<li>등록된 메뉴가 없습니다.</li>";
             return;
         }
         
-        // 정상 렌더링
         document.getElementById('sugar-value').innerHTML = mealDetails.sugar + "g";
+        const cubes = (mealDetails.sugar / 3).toFixed(1);
+        document.getElementById('sugar-cubes').innerHTML = `각설탕 약 ${cubes}개`;
         document.getElementById('calorie-value').innerHTML = mealDetails.kcal + " kcal";
         
-        // 🌟 탄단지 데이터 UI 연결
+        // 탄단지 데이터 정상 화면 맵핑
         document.getElementById('carbs-value').innerHTML = (mealDetails.carbs || 0) + "g";
         document.getElementById('protein-value').innerHTML = (mealDetails.protein || 0) + "g";
         document.getElementById('fat-value').innerHTML = (mealDetails.fat || 0) + "g";
 
+        let kcalLevel = "";
+        let kcalColor = "";
+        if (mealDetails.kcal > 860) {
+            kcalLevel = "열량 높음";
+            kcalColor = "#ef4444";
+        } else if (mealDetails.kcal >= 780) {
+            kcalLevel = "열량 보통";
+            kcalColor = "#f59e0b";
+        } else {
+            kcalLevel = "열량 낮음";
+            kcalColor = "#10b981";
+        }
+        
+        const calLevelEl = document.getElementById('calorie-level');
+        calLevelEl.innerHTML = kcalLevel;
+        calLevelEl.style.color = kcalColor;
+        
         document.getElementById('status-badge').innerHTML = mealDetails.label;
         document.getElementById('status-badge').className = "status-box " + mealDetails.status;
+        document.getElementById('status-text').innerHTML = mealDetails.desc;
         
-        let infoText = mealDetails.desc || "오늘도 건강한 하루 보내세요!";
-        if(mealDetails.sugar >= 30) infoText = "당류가 30g을 초과했습니다! 액상과당 음료나 디저트를 주의하세요.";
-        else if(mealDetails.sugar >= 20) infoText = "당류가 다소 높습니다. 매점 간식 이용을 줄이는 것이 좋습니다.";
-        document.getElementById('status-text').innerHTML = infoText;
-        
+        document.getElementById('ex-walk').innerHTML = mealDetails.walk + "분";
+        document.getElementById('ex-run').innerHTML = mealDetails.run + "분";
+        document.getElementById('ex-bike').innerHTML = mealDetails.bike + "분";
+        document.getElementById('ex-rope').innerHTML = mealDetails.rope + "분";
+        if (mealDetails.tip) document.getElementById('tip-text').innerHTML = mealDetails.tip;
+
         menuUl.innerHTML = "";
         if (mealDetails.menu && mealDetails.menu.length > 0) {
-            mealDetails.menu.forEach(m => {
+            mealDetails.menu.forEach(function(m) {
                 const li = document.createElement('li');
                 li.innerHTML = m;
                 menuUl.appendChild(li);
             });
+        } else {
+            menuUl.innerHTML = "<li>등록된 메뉴가 없습니다.</li>";
         }
 
-        document.querySelectorAll('.date-btn').forEach(btn => {
-            if (btn.getAttribute('data-id') === itemData.id) btn.classList.add('active');
-            else btn.classList.remove('active');
+        const allDateBtns = document.querySelectorAll('.date-btn');
+        allDateBtns.forEach(function(btn) {
+            if (btn.getAttribute('data-id') === itemData.id) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
         });
     }
 
@@ -240,37 +474,107 @@
                 else btn.classList.remove('active');
             }
         }
+
         const btnContainer = document.getElementById('date-buttons-container');
         btnContainer.innerHTML = "";
+
         const days = mealData[weekNum];
         if (!days) return;
 
-        days.forEach(d => {
+        days.forEach(function(d) {
             const btn = document.createElement('button');
             btn.className = "date-btn";
             btn.setAttribute('data-id', d.id);
             btn.innerHTML = d.day.split('(')[0].trim();
-            btn.onclick = () => updateUI(d);
+            
+            btn.onclick = function() { updateUI(d); };
             btnContainer.appendChild(btn);
         });
     }
 
     function initApp() {
-        for (let i = 1; i <= 5; i++) {
-            const btn = document.getElementById('week-btn-' + i);
-            if (btn) btn.onclick = () => { setWeek(i); if (mealData[i] && mealData[i][0]) updateUI(mealData[i][0]); };
+        try {
+            function dateToNum(idStr) {
+                if (!idStr || typeof idStr !== 'string') return 0;
+                const parts = idStr.split('-');
+                if (parts.length !== 2) return 0;
+                return parseInt(parts[0], 10) * 100 + parseInt(parts[1], 10);
+            }
+
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById('week-btn-' + i);
+                if (btn) {
+                    btn.onclick = function() {
+                        setWeek(i);
+                        if (mealData[i] && mealData[i][0]) updateUI(mealData[i][0]);
+                    };
+                }
+            }
+
+            const now = new Date();
+            const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+            const currentDate = String(now.getDate()).padStart(2, '0');
+            const todayId = currentMonth + "-" + currentDate;
+            const todayNum = dateToNum(todayId);
+
+            let foundWeek = 1;
+            let foundData = null;
+            let closestFutureWeek = null;
+            let closestFutureData = null;
+
+            for (let w = 1; w <= 5; w++) {
+                if (mealData[w]) {
+                    for (let i = 0; i < mealData[w].length; i++) {
+                        const item = mealData[w][i];
+                        const itemNum = dateToNum(item.id);
+                        
+                        if (itemNum === todayNum) {
+                            foundWeek = w;
+                            foundData = item;
+                            break;
+                        } else if (itemNum > todayNum) {
+                            const currentClosestNum = closestFutureData ? dateToNum(closestFutureData.id) : Infinity;
+                            if (itemNum < currentClosestNum) {
+                                closestFutureWeek = w;
+                                closestFutureData = item;
+                            }
+                        }
+                    }
+                }
+                if (foundData) break;
+            }
+
+            if (!foundData) {
+                if (closestFutureData) {
+                    foundWeek = closestFutureWeek;
+                    foundData = closestFutureData;
+                } else {
+                    foundWeek = 1;
+                    foundData = mealData[1][0]; 
+                }
+            }
+
+            setWeek(foundWeek);
+            updateUI(foundData);
+
+        } catch (error) {
+            document.getElementById('status-text').innerHTML = "초기화 오류: " + error.message;
         }
-        // 기본 1주차 첫 번째 날짜로 세팅
-        if(mealData["1"]) { setWeek(1); updateUI(mealData["1"][0]); }
     }
 
-    window.onload = () => {
+    window.onload = function() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(function() { console.log("PWA 서비스 워커 등록 성공!"); });
+        }
+
         document.getElementById('btn-lunch').onclick = function() {
             currentMealType = 'lunch';
             this.classList.add('active');
             document.getElementById('btn-dinner').classList.remove('active');
             updateUI(selectedItemData);
         };
+
         document.getElementById('btn-dinner').onclick = function() {
             currentMealType = 'dinner';
             this.classList.add('active');
@@ -278,11 +582,39 @@
             updateUI(selectedItemData);
         };
 
-        // 데이터 불러오기 (캐시 방지용 쿼리 추가)
+        let deferredPrompt;
+        const pwaBtn = document.getElementById('pwa-button');
+        const iosText = document.getElementById('ios-text');
+
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            iosText.style.display = 'none';
+        }
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            pwaBtn.style.display = 'block';
+            iosText.style.display = 'none';
+
+            pwaBtn.onclick = function() {
+                pwaBtn.style.display = 'none';
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(function() { deferredPrompt = null; });
+            };
+        });
+
         fetch('menu.json?v=' + Date.now())
-            .then(res => res.json())
-            .then(data => { mealData = data; initApp(); })
-            .catch(err => { document.getElementById('status-text').innerHTML = "데이터 오류: " + err; });
+            .then(response => {
+                if (!response.ok) throw new Error('네트워크 응답 없음');
+                return response.json();
+            })
+            .then(data => {
+                mealData = data;
+                initApp(); 
+            })
+            .catch(error => {
+                document.getElementById('status-text').innerHTML = "식단 데이터를 가져오지 못했습니다. menu.json 구조나 경로를 확인해 주세요.";
+            });
     };
 </script>
 </body>
