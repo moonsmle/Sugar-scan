@@ -325,6 +325,7 @@
             </div>
         </div>
 
+        <!-- 💡 실시간 분석 팁이 연동되어 출력될 공간 -->
         <div id="status-text">식단 데이터를 불러오는 중입니다...</div>
     </div>
 
@@ -370,6 +371,63 @@
     let currentMealType = 'lunch'; 
     let selectedItemData = null;   
 
+    /**
+     * 💡 [식단 메뉴 지능형 자동 분석 함수]
+     * 메뉴 배열을 읽어서 당류 유발 원인을 찾고 건강 팁 문장을 만들어냅니다.
+     */
+    function generateSmartTip(menus, sugarVal) {
+        if (!menus || menus.length === 0) return `오늘의 당류 섭취량은 ${sugarVal}g입니다.`;
+
+        let causeMenu = "";
+        let advice = "국물보다는 건더기 위주로 섭취하고 가벼운 산책을 권장합니다."; // 기본 제안
+
+        // 당류 유발 핵심 키워드 감지 엔진
+        for (let i = 0; i < menus.length; i++) {
+            const m = menus[i];
+            if (m.includes("주스") || m.includes("음료") || m.includes("에이드") || m.includes("요구르트") || m.includes("드링크")) {
+                causeMenu = m;
+                advice = "액상과당이 포함된 음료류는 혈당을 빠르게 올리니 후식 음료의 섭취량을 반으로 줄여보세요.";
+                break;
+            }
+            if (m.includes("떡볶이") || m.includes("탕수육") || m.includes("강정") || m.includes("조림") || m.includes("구이") || m.includes("양념")) {
+                causeMenu = m;
+                advice = "양념 소스나 물엿이 많이 들어간 메뉴입니다. 소스를 걷어내거나 조금만 찍어 드시면 당류 섭취를 크게 낮출 수 있습니다.";
+                break;
+            }
+            if (m.includes("튀김") || m.includes("돈까스") || m.includes("커틀릿") || m.includes("너겟")) {
+                causeMenu = m;
+                advice = "정제 탄수화물 튀김옷과 케첩/돈까스 소스는 숨겨진 당류가 많습니다. 소스 양을 조절하여 건강하게 드셔보세요.";
+                break;
+            }
+            if (m.includes("케이크") || m.includes("빵") || m.includes("도넛") || m.includes("와플") || m.includes("푸딩") || m.includes("초코")) {
+                causeMenu = m;
+                advice = "베이커리류 후식은 순수 정제당 함량이 매우 높습니다. 점심에 빵을 드셨다면 오후 간식은 피하는 것이 좋습니다.";
+                break;
+            }
+            if (m.includes("찌개") || m.includes("국") || m.includes("볶음")) {
+                causeMenu = m;
+                advice = "짠맛을 내기 위해 은근히 많은 설탕이 들어가는 메뉴입니다. 국물을 끝까지 마시지 않는 것만으로도 당과 나트륨을 동시에 줄입니다.";
+            }
+        }
+
+        // 당류 등급에 따른 종합 분석 문장 조합
+        if (sugarVal >= 30) {
+            if (causeMenu) {
+                return `🚨 <b>당 함량 위험!</b> 오늘 식단 중 <b>[${causeMenu}]</b> 등의 메뉴로 인해 총 당류가 ${sugarVal}g까지 높아졌습니다. ${advice}`;
+            } else {
+                return `🚨 <b>당 함량 위험!</b> 총 당류가 ${sugarVal}g으로 높은 편입니다. 밥과 양념류 반찬의 섭취량을 평소보다 조금씩 줄여서 드시는 것을 추천합니다.`;
+            }
+        } else if (sugarVal >= 15) {
+            if (causeMenu) {
+                return `🟡 <b>당 함량 주의!</b> <b>[${causeMenu}]</b>에 포함된 양념이나 당 성분으로 인해 당류가 소폭 상승했습니다. 반찬 양을 적당히 조절하면 더욱 건강한 식사가 됩니다.`;
+            } else {
+                return `🟡 <b>당 함량 주의!</b> 오늘 식단의 당류는 ${sugarVal}g입니다. 식사 후 매점에서 탄산음료나 달콤한 간식을 추가로 먹는 것은 피해 주세요.`;
+            }
+        } else {
+            return `🟢 <b>당 함량 안전!</b> 오늘 식단은 당류가 ${sugarVal}g으로 매우 균형 잡혀 있습니다. 이 상태를 유지하며 가공식품 간식만 주의하시면 완벽합니다!`;
+        }
+    }
+
     function updateUI(itemData) {
         if (!itemData) return;
         selectedItemData = itemData;
@@ -395,7 +453,6 @@
             document.getElementById('status-badge').className = "status-box";
             document.getElementById('status-text').innerHTML = `${currentMealType === 'lunch' ? '중식' : '석식'} 식단 데이터가 등록되지 않았습니다.`;
             
-            // 데이터 없을 때 탄단지 초기화
             document.getElementById('carbs-value').innerHTML = "0g";
             document.getElementById('protein-value').innerHTML = "0g";
             document.getElementById('fat-value').innerHTML = "0g";
@@ -408,7 +465,6 @@
             return;
         }
         
-        // 1. 기존 데이터 화면 맵핑
         const sugarVal = mealDetails.sugar !== undefined ? parseFloat(mealDetails.sugar) : 0;
         document.getElementById('sugar-value').innerHTML = sugarVal + "g";
         const cubes = (sugarVal / 3).toFixed(1);
@@ -439,20 +495,18 @@
         document.getElementById('status-badge').innerHTML = mealDetails.label || "⚪ 정보 없음";
         document.getElementById('status-badge').className = "status-box " + (mealDetails.status || "");
         
-        // 2. 💡 [식단 설명 및 팁 undefined 방어 연동]
-        // 6월달 메뉴 코드(JSON)에 추가했던 'tip' 또는 기존 'desc' 필드를 순서대로 매핑합니다.
-        const mealTip = mealDetails.tip || mealDetails.desc || `오늘 섭취하는 당류는 총 ${sugarVal}g입니다. 건강한 하루 보내세요!`;
-        document.getElementById('status-text').innerHTML = mealTip;
+        // 💡 [식단별 자동 분석 팁 연동 영역]
+        // 6월달 데이터 구조처럼 JSON 파일 내부에 개발자님이 직접 입력한 'tip' 혹은 'desc'가 있으면 그걸 최우선으로 출력하고, 
+        // 입력하지 않은 날에는 위의 'generateSmartTip' 함수가 실시간으로 원인 메뉴와 건강 가이드를 조합해 출력합니다.
+        const finalTip = mealDetails.tip || mealDetails.desc || generateSmartTip(mealDetails.menu, sugarVal);
+        document.getElementById('status-text').innerHTML = finalTip;
         
-        // 하단 초록색 고정 안내 영역도 tip 데이터가 있으면 연동하고, 없으면 기본 안내 문구를 띄웁니다.
         if (mealDetails.tip) {
             document.getElementById('tip-text').innerHTML = mealDetails.tip;
         } else {
             document.getElementById('tip-text').innerHTML = "매점 이용을 줄이면 청소년기 건강 관리에 큰 도움이 됩니다.";
         }
         
-        // 3. 💡 [운동 수치 undefined 방어 및 실시간 연산 적용]
-        // 데이터에 직접 소모 시간 정보(walk, run 등)가 정의되어 있지 않은 날은 당 함량 기반으로 자동 세팅합니다.
         const walkMin = mealDetails.walk !== undefined ? mealDetails.walk : Math.round(sugarVal * 2.5);
         const runMin = mealDetails.run !== undefined ? mealDetails.run : Math.round(sugarVal * 1.0);
         const bikeMin = mealDetails.bike !== undefined ? mealDetails.bike : Math.round(sugarVal * 1.8);
